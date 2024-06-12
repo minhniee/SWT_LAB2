@@ -15,8 +15,8 @@ import java.util.Scanner;
  */
 public class TaskManager {
 
-    private static  Scanner in = new Scanner(System.in);
-    private static final String PLAN_VALID = "^[0-9]{1,2}\\.5|[0-9]{1,2}\\.0$";
+    public static  Scanner in = new Scanner(System.in);
+    public static final String PLAN_VALID = "^[0-9]{1,2}\\.5|[0-9]{1,2}\\.0$";
 
     public TaskManager(InputStream input) {
         this.in = new Scanner(input);
@@ -37,7 +37,7 @@ public class TaskManager {
         }
     }
 
-    private static String checkInputDate() {
+    public static String checkInputDate() {
         while (true) {
             try {
                 String result = in.nextLine().trim();
@@ -47,16 +47,17 @@ public class TaskManager {
                     return result;
                 } else {
                     System.err.println("Re-input");
+                    return "Re-input";
+
                 }
-            } catch (NumberFormatException ex) {
+            } catch (Exception ex) {
                 System.err.println("Re-input");
-            } catch (ParseException ex) {
-                System.err.println("Re-input");
+                return "Re-input";
             }
         }
     }
 
-    private static String checkInputString() {
+    public static String checkInputString() {
         while (true) {
             String result = in.nextLine().trim();
             if (result.length() == 0) {
@@ -67,7 +68,7 @@ public class TaskManager {
         }
     }
 
-    private static int checkInputInt() {
+    public static int checkInputInt() {
         while (true) {
             try {
                 int result = Integer.parseInt(in.nextLine());
@@ -78,7 +79,7 @@ public class TaskManager {
         }
     }
 
-    private static String checkInputTaskTypeId() {
+    public static String checkInputTaskTypeId() {
         while (true) {
             int n = checkIntLimit(1, 4);
             String result = null;
@@ -99,7 +100,7 @@ public class TaskManager {
         }
     }
 
-    private static String checkInputPlan() {
+    public static String checkInputPlan() {
         while (true) {
             String result = checkInputString();
             if (result.matches(PLAN_VALID) && Double.parseDouble(result) >= 8.0
@@ -111,7 +112,7 @@ public class TaskManager {
         }
     }
 
-    private static void addTask(ArrayList<Task> lt, int id) {
+    public static void addTask(ArrayList<Task> lt, int id) {
         System.out.print("Enter Requirement Name: ");
         String requirementName = checkInputString();
         System.out.print("Enter Task Type: ");
@@ -122,6 +123,18 @@ public class TaskManager {
         String planFrom = checkInputPlan();
         System.out.print("Enter To: ");
         String planTo = checkInputPlan();
+        double valuePlanTo= Double.parseDouble(planTo);
+        double valuePlanFrom= Double.parseDouble(planFrom);
+
+        while (valuePlanTo - valuePlanFrom <0){
+            System.out.println("Plan to great than plan form");
+            System.out.print("Enter From: ");
+             planFrom = checkInputPlan();
+            System.out.print("Enter To: ");
+             planTo = checkInputPlan();
+            valuePlanTo= Double.parseDouble(planTo);
+            valuePlanFrom= Double.parseDouble(planFrom);
+        }
         System.out.print("Enter Assignee: ");
         String assign = checkInputString();
         System.out.print("Enter Reviewer: ");
@@ -130,7 +143,7 @@ public class TaskManager {
         System.out.println("Add Task Success.");
     }
 
-    private static void deleteTask(ArrayList<Task> lt, int id) {
+    public static void deleteTask(ArrayList<Task> lt, int id) {
         if (lt.isEmpty()) {
             System.err.println("List empty");
             return;
@@ -145,7 +158,7 @@ public class TaskManager {
         }
     }
 
-    private static int findTaskExist(ArrayList<Task> lt) {
+    public static int findTaskExist(ArrayList<Task> lt) {
         System.out.print("Enter id: ");
         int id = checkInputInt();
         for (int i = 0; i < lt.size(); i++) {
@@ -157,7 +170,7 @@ public class TaskManager {
         return -1;
     }
 
-    private static void print(ArrayList<Task> lt) {
+    public static void print(ArrayList<Task> lt) {
         if (lt.isEmpty()) {
             System.err.println("List empty.");
             return;
