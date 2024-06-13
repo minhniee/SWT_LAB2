@@ -62,17 +62,7 @@ public class UserProgram {
             }
         }
     }
-
-    private static String checkInputEmail() {
-        while (true) {
-            String result = in.nextLine().trim();
-            if (result.length() != 0 && result.matches(EMAIL_VALID)) {
-                return result;
-            } else {
-                System.err.println("Re-input");
-            }
-        }
-    }
+    
 
     private static String checkInputString() {
         while (true) {
@@ -135,7 +125,7 @@ public class UserProgram {
         System.out.print("Enter Phone: ");
         String phone = checkInputPhone();
         System.out.print("Enter email: ");
-        String email = checkInputEmail();
+        String email = TaskManager.checkInputEmail();
         System.out.print("Enter address: ");
         String address = checkInputString();
         System.out.print("Enter Date Of Birth: ");
@@ -145,25 +135,7 @@ public class UserProgram {
         System.out.println("Add success!!!");
     }
 
-    private static void login(ArrayList<Account> la) {
-        if (la.isEmpty()) {
-            System.err.println("Accout empty.");
-            return;
-        }
-        System.out.print("Enter username: ");
-        String username = checkInputString();
-        System.out.print("Enter Password: ");
-        String password = checkInputString();
-        Account accoutLogin = findAccount(la, username, password);
-        if (accoutLogin != null) {
-            System.out.println("Wellcome");
-            System.out.print("Hi " + accoutLogin.getUsername()
-                    + ", do you want chage password now? Y/N: ");
-            changePassword(accoutLogin);
-        } else {
-            System.err.println("Invalid username or password.");
-        }
-    }
+
 
     private static Account findAccount(ArrayList<Account> la, String username,
             String password) {
@@ -179,39 +151,7 @@ public class UserProgram {
         return null;
     }
 
-    private static void changePassword(Account accoutLogin) {
-        String choice;
-        while (true) {
-            choice = in.nextLine().trim();
-            if (choice.length() == 0) {
-                System.err.println("Not empty!!!");
-            } else if (choice.length() == 1 && choice.equalsIgnoreCase("Y")
-                    || choice.equalsIgnoreCase("N")) {
-                break;
-            } else {
-                System.err.println("Re-input");
-            }
-        }
-        if (choice.equalsIgnoreCase("Y")) {
-            System.out.print("Old password: ");
-            String oldPassword = checkInputString();
-            System.out.print("New password: ");
-            String newPassword = checkInputString();
-            System.out.print("Renew password: ");
-            String renewPassword = checkInputString();
-            if (MD5Encryption(oldPassword).equalsIgnoreCase(accoutLogin.getPassword()) == false) {
-                System.err.println("Old password incorrect.");
-            }
-            if (newPassword.equalsIgnoreCase(renewPassword) == false) {
-                System.err.println("New password and Renew password not the same.");
-            }
-            if (MD5Encryption(oldPassword).equalsIgnoreCase(accoutLogin.getPassword()) == true
-                    && newPassword.equalsIgnoreCase(renewPassword) == true) {
-                accoutLogin.setPassword(MD5Encryption(newPassword));
-                System.out.println("Change password success");
-            }
-        }
-    }
+
 
     public static void display() {
         ArrayList<Account> la = new ArrayList<>();
@@ -226,7 +166,7 @@ public class UserProgram {
                     addAccount(la);
                     break;
                 case 2:
-                    login(la);
+                    TaskManager.login(la);
                     break;
                 case 3:
                     return;
