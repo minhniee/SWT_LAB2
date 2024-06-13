@@ -44,9 +44,7 @@ public class UserProgram {
                 } else {
                     System.err.println("Re-input");
                 }
-            } catch (NumberFormatException ex) {
-                System.err.println("Re-input");
-            } catch (ParseException ex) {
+            } catch (NumberFormatException | ParseException ex) {
                 System.err.println("Re-input");
             }
         }
@@ -55,7 +53,7 @@ public class UserProgram {
     private static String checkInputPhone() {
         while (true) {
             String result = in.nextLine().trim();
-            if (result.length() != 0 && result.matches(PHONE_VALID)) {
+            if (!result.isEmpty() && result.matches(PHONE_VALID)) {
                 return result;
             } else {
                 System.err.println("Re-input");
@@ -66,7 +64,7 @@ public class UserProgram {
     private static String checkInputEmail() {
         while (true) {
             String result = in.nextLine().trim();
-            if (result.length() != 0 && result.matches(EMAIL_VALID)) {
+            if (!result.isEmpty() && result.matches(EMAIL_VALID)) {
                 return result;
             } else {
                 System.err.println("Re-input");
@@ -77,7 +75,7 @@ public class UserProgram {
     private static String checkInputString() {
         while (true) {
             String result = in.nextLine().trim();
-            if (result.length() == 0) {
+            if (result.isEmpty()) {
                 System.err.println("Not empty");
             } else {
                 return result;
@@ -88,8 +86,8 @@ public class UserProgram {
     private static String checkInputUsername(ArrayList<Account> la) {
         while (true) {
             String result = checkInputString();
-            for (int i = 0; i < la.size(); i++) {
-                if (result.equalsIgnoreCase(la.get(i).getUsername())) {
+            for (Account account : la) {
+                if (result.equalsIgnoreCase(account.getUsername())) {
                     System.err.println("Username exist!!!");
                 }
             }
@@ -167,10 +165,10 @@ public class UserProgram {
 
     private static Account findAccount(ArrayList<Account> la, String username,
             String password) {
-        for (int i = 0; i < la.size(); i++) {
-            if (username.equalsIgnoreCase(la.get(i).getUsername())) {
-                if (MD5Encryption(password).equalsIgnoreCase(la.get(i).getPassword())) {
-                    return la.get(i);
+        for (Account account : la) {
+            if (username.equalsIgnoreCase(account.getUsername())) {
+                if (MD5Encryption(password).equalsIgnoreCase(account.getPassword())) {
+                    return account;
                 } else {
                     return null;
                 }
@@ -183,9 +181,9 @@ public class UserProgram {
         String choice;
         while (true) {
             choice = in.nextLine().trim();
-            if (choice.length() == 0) {
+            if (choice.isEmpty()) {
                 System.err.println("Not empty!!!");
-            } else if (choice.length() == 1 && choice.equalsIgnoreCase("Y")
+            } else if (choice.equalsIgnoreCase("Y")
                     || choice.equalsIgnoreCase("N")) {
                 break;
             } else {
@@ -199,14 +197,14 @@ public class UserProgram {
             String newPassword = checkInputString();
             System.out.print("Renew password: ");
             String renewPassword = checkInputString();
-            if (MD5Encryption(oldPassword).equalsIgnoreCase(accoutLogin.getPassword()) == false) {
+            if (!MD5Encryption(oldPassword).equalsIgnoreCase(accoutLogin.getPassword())) {
                 System.err.println("Old password incorrect.");
             }
-            if (newPassword.equalsIgnoreCase(renewPassword) == false) {
+            if (!renewPassword.equalsIgnoreCase(newPassword)) {
                 System.err.println("New password and Renew password not the same.");
             }
-            if (MD5Encryption(oldPassword).equalsIgnoreCase(accoutLogin.getPassword()) == true
-                    && newPassword.equalsIgnoreCase(renewPassword) == true) {
+            if (MD5Encryption(oldPassword).equalsIgnoreCase(accoutLogin.getPassword())
+                    && newPassword.equalsIgnoreCase(renewPassword)) {
                 accoutLogin.setPassword(MD5Encryption(newPassword));
                 System.out.println("Change password success");
             }

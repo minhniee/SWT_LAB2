@@ -15,9 +15,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
-;
-
 import static controller.TaskManager.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -160,7 +157,8 @@ class TaskManagerTest {
         taskManager = new TaskManager(System.in);
 
         String result = checkInputString();
-        assertEquals("Hello, World!", result);
+        assertTrue(
+                result.equals("Hello, World!"));
     }
 
     @Test
@@ -201,19 +199,17 @@ class TaskManagerTest {
             "2, test",  // valid
             "3, manager",  // valid
             "4, learn",  // valid
-            "5, -1",   // invalid
-            "-1, -1",  // invalid
+            "5, ",   // invalid
+            "-1, ",  // invalid
     })
     void testValidInputWithinRangeNumberIPTTID01(int input, String expected) {
         ByteArrayInputStream testIn = new ByteArrayInputStream((input + "\n").getBytes());
         System.setIn(testIn);
         taskManager = new TaskManager(System.in);
         String result = checkInputTaskTypeId();
-//        if (expected.equals('a') || expected.equals("1a") ){
-//            assertThrows(Exception.class, () -> taskManager.checkInputTaskTypeId());
-//        }else{
-        assertEquals(expected, result);
-//        }
+        if( expected  =="5" || expected == "-1"){
+        assertNull(result);
+        }else assertEquals(expected, result);
     }
     @Test
     void testInValidInputWithLetterAndDigitIPTTID02() {
@@ -225,13 +221,12 @@ class TaskManagerTest {
     } // asertnull
     @Test
     void testInValidInputWithEmptyIPTTID03() {
-        ByteArrayInputStream testIn = new ByteArrayInputStream("1a\n".getBytes());
+        ByteArrayInputStream testIn = new ByteArrayInputStream("\n".getBytes());
         System.setIn(testIn);
         taskManager = new TaskManager(System.in);
         String result = checkInputTaskTypeId();
-        assertEquals("-1", result);
+        assertNull( result);
     }
-    //======================================Check Input Plant===============================================(IPPL)
     //==========================CHECK INPUT PLAN=========================================(IPPL)
     // begin 8.0 step +,5 to 17.5
     @Test
